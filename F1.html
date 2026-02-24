@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE FORMULA 1 PITSTOP!</title>
+    
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --f1-red: #e10600;
+            --dark-bg: #15151e;
+            --card-bg: #1f1f27;
+            --text-color: #ffffff;
+            --stat-bg: #2b2b35;
+        }
+
+        /* Dark Mode is Default */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* Light Mode Overrides */
+        body.light-theme {
+            --dark-bg: #f4f4f9;
+            --card-bg: #ffffff;
+            --text-color: #15151e;
+            --stat-bg: #e0e0e0;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background-color: var(--f1-red);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h1 { margin: 0; font-size: 1.5rem; letter-spacing: 1px; }
+
+        .navbar ul { display: flex; list-style: none; margin: 0; padding: 0; align-items: center; }
+        .navbar li { margin-left: 20px; }
+        .navbar a { color: white; text-decoration: none; font-weight: bold; }
+
+        #theme-toggle {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        #theme-toggle:hover { transform: scale(1.05); }
+
+        /* Hero Section */
+        .hero { text-align: center; padding: 60px 20px; }
+        .hero h2 { font-size: 2.5rem; margin-bottom: 10px; }
+
+        /* Driver Grid */
+        .driver-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            padding: 0 5% 50px 5%;
+        }
+
+        .driver-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-bottom: 4px solid transparent;
+        }
+
+        body.light-theme .driver-card {
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .driver-card:hover { transform: translateY(-10px); }
+
+        /* Team Colors */
+        .team-stripe { height: 8px; width: 100%; }
+        .mclaren { background-color: #ff8700; border-bottom-color: #ff8700; }
+        .ferrari { background-color: #ff2800; border-bottom-color: #ff2800; }
+        .redbull { background-color: #0600ef; border-bottom-color: #0600ef; }
+
+        .card-content { padding: 25px; }
+        .number { float: right; color: #666; font-size: 1.8rem; font-weight: bold; }
+        .team { font-style: italic; color: #888; margin-bottom: 15px; font-weight: 500; }
+
+        .bio { line-height: 1.6; font-size: 0.95rem; min-height: 80px; }
+
+        .stats {
+            background: var(--stat-bg);
+            padding: 15px;
+            list-style: none;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .stats li { margin-bottom: 5px; font-size: 0.9rem; }
+        .stats strong { color: var(--f1-red); }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <h1>THE FORMULA 1 PITSTOP!</h1>
+        <ul>
+            <li><a href="#">Drivers</a></li>
+            <li><button id="theme-toggle">🌙 Dark Mode</button></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <h2>The 2026 Grid</h2>
+        <p>New engines. New rivalries. Same obsession with speed.</p>
+    </header>
+
+    <div class="card" data-name="Lando Norris">
+    <div class="team-stripe mclaren"></div>
+    <div class="content">
+        <h3>Lando Norris <span style="float:right">#1</span></h3>
+        <p><strong>McLaren-Mercedes</strong></p>
+        <p>The 2025 World Champion. Lando leads the grid as the man to beat in the new aero era.</p>
+        <div class="stats-box">WDC: 1 | Wins: 12 | Podiums: 74</div>
+    </div>
+</div>
+<div class="card" data-name="Oscar Piastri">
+    <div class="team-stripe mclaren"></div>
+    <div class="content">
+        <h3>Oscar Piastri <span style="float:right">#81</span></h3>
+        <p><strong>McLaren-Mercedes</strong></p>
+        <p>Entering his fourth season, Piastri is now a multiple GP winner and title threat.</p>
+        <div class="stats-box">Wins: 4 | Podiums: 18 | Poles: 3</div>
+    </div>
+</div>
+
+<div class="card" data-name="Charles Leclerc">
+    <div class="team-stripe ferrari"></div>
+    <div class="content">
+        <h3>Charles Leclerc <span style="float:right">#16</span></h3>
+        <p><strong>Scuderia Ferrari</strong></p>
+        <p>The "Prince of Maranello" continues his quest for a home title alongside Hamilton.</p>
+        <div class="stats-box">Wins: 9 | Poles: 28 | Podiums: 42</div>
+    </div>
+</div>
+<div class="card" data-name="Lewis Hamilton">
+    <div class="team-stripe ferrari"></div>
+    <div class="content">
+        <h3>Lewis Hamilton <span style="float:right">#44</span></h3>
+        <p><strong>Scuderia Ferrari</strong></p>
+        <p>In his second year in red, Lewis is hunting for an 8th title with the SF-26.</p>
+        <div class="stats-box">WDC: 7 | Wins: 105 | Podiums: 202</div>
+    </div>
+</div>
+
+<div class="card" data-name="Max Verstappen">
+    <div class="team-stripe redbull"></div>
+    <div class="content">
+        <h3>Max Verstappen <span style="float:right">#3</span></h3>
+        <p><strong>Red Bull-Ford</strong></p>
+        <p>Switching back to #3, Max leads the first year of the Red Bull-Ford power unit partnership.</p>
+        <div class="stats-box">WDC: 3 | Wins: 64 | Podiums: 110</div>
+    </div>
+</div>
+<div class="card" data-name="Isack Hadjar">
+    <div class="team-stripe redbull"></div>
+    <div class="content">
+        <h3>Isack Hadjar <span style="float:right">#6</span></h3>
+        <p><strong>Red Bull-Ford</strong></p>
+        <p>The 2026 standout rookie promoted to the senior team after a stellar stint at Racing Bulls.</p>
+        <div class="stats-box">Best Finish: P3 | Points: 42</div>
+    </div>
+</div>
+
+<div class="card" data-name="George Russell">
+    <div class="team-stripe mercedes"></div>
+    <div class="content">
+        <h3>George Russell <span style="float:right">#63</span></h3>
+        <p><strong>Mercedes-AMG</strong></p>
+        <p>The de facto team leader at Brackley. George looks for a 2026 title charge.</p>
+        <div class="stats-box">Wins: 5 | Poles: 7 | Podiums: 24</div>
+    </div>
+</div>
+<div class="card" data-name="Kimi Antonelli">
+    <div class="team-stripe mercedes"></div>
+    <div class="content">
+        <h3>Kimi Antonelli <span style="float:right">#12</span></h3>
+        <p><strong>Mercedes-AMG</strong></p>
+        <p>The teenage sensation. Kimi has already proven his pace with a Sprint pole in 2025.</p>
+        <div class="stats-box">Podiums: 3 | Best Finish: P2</div>
+    </div>
+</div>
+
+<div class="card" data-name="Fernando Alonso">
+    <div class="team-stripe astonmartin" style="background:#006f62"></div>
+    <div class="content">
+        <h3>Fernando Alonso <span style="float:right">#14</span></h3>
+        <p><strong>Aston Martin-Honda</strong></p>
+        <p>Reunited with Honda power and Adrian Newey design at the age of 44.</p>
+        <div class="stats-box">WDC: 2 | Wins: 32 | Podiums: 106</div>
+    </div>
+</div>
+<div class="card" data-name="Lance Stroll">
+    <div class="team-stripe astonmartin" style="background:#006f62"></div>
+    <div class="content">
+        <h3>Lance Stroll <span style="float:right">#18</span></h3>
+        <p><strong>Aston Martin-Honda</strong></p>
+        <p>Continuing his long-term partnership with Alonso in the Newey-led era.</p>
+        <div class="stats-box">Podiums: 3 | Points: 500+</div>
+    </div>
+</div>
+
+<div class="card" data-name="Nico Hülkenberg">
+    <div class="team-stripe audi" style="background:#000"></div>
+    <div class="content">
+        <h3>Nico Hülkenberg <span style="float:right">#27</span></h3>
+        <p><strong>Audi Revolut</strong></p>
+        <p>The veteran lead for Audi’s historic works entry into Formula 1.</p>
+        <div class="stats-box">GP Starts: 250+ | Best Finish: P4</div>
+    </div>
+</div>
+<div class="card" data-name="Gabriel Bortoleto">
+    <div class="team-stripe audi" style="background:#000"></div>
+    <div class="content">
+        <h3>Gabriel Bortoleto <span style="float:right">#5</span></h3>
+        <p><strong>Audi Revolut</strong></p>
+        <p>Brazil's latest F1 star enters his second season as a future cornerstone for Audi.</p>
+        <div class="stats-box">Points: 28 | Best Finish: P6</div>
+    </div>
+</div>
+
+<div class="card" data-name="Sergio Perez">
+    <div class="team-stripe cadillac"></div>
+    <div class="content">
+        <h3>Sergio Pérez <span style="float:right">#11</span></h3>
+        <p><strong>Cadillac V-Series</strong></p>
+        <p>The "Minister of Defence" joins the 11th team to lead their American debut.</p>
+        <div class="stats-box">Wins: 6 | Podiums: 39</div>
+    </div>
+</div>
+<div class="card" data-name="Valtteri Bottas">
+    <div class="team-stripe cadillac"></div>
+    <div class="content">
+        <h3>Valtteri Bottas <span style="float:right">#77</span></h3>
+        <p><strong>Cadillac V-Series</strong></p>
+        <p>The experienced Finn partners with Perez to form the most veteran lineup on the grid.</p>
+        <div class="stats-box">Wins: 10 | Podiums: 67</div>
+    </div>
+</div>
+
+<div class="card" data-name="Carlos Sainz">
+    <div class="team-stripe williams" style="background:#00a0de"></div>
+    <div class="content">
+        <h3>Carlos Sainz <span style="float:right">#55</span></h3>
+        <p><strong>Williams-Mercedes</strong></p>
+        <p>Leading the Grove resurgence. Sainz has already brought Williams back to the podium.</p>
+        <div class="stats-box">Wins: 3 | Podiums: 25</div>
+    </div>
+</div>
+<div class="card" data-name="Alex Albon">
+    <div class="team-stripe williams" style="background:#00a0de"></div>
+    <div class="content">
+        <h3>Alex Albon <span style="float:right">#23</span></h3>
+        <p><strong>Williams-Mercedes</strong></p>
+        <p>The heart of Williams Racing. Alex remains a top-tier midfield qualifier.</p>
+        <div class="stats-box">Podiums: 2 | Points: 250+</div>
+    </div>
+</div>
+
+<div class="card" data-name="Esteban Ocon">
+    <div class="team-stripe haas" style="background:#fff; border-bottom:2px solid red"></div>
+    <div class="content">
+        <h3>Esteban Ocon <span style="float:right">#31</span></h3>
+        <p><strong>Haas-Ferrari</strong></p>
+        <p>Leading the American outfit alongside Bearman. Known for his defensive grit.</p>
+        <div class="stats-box">Wins: 1 | Podiums: 4</div>
+    </div>
+</div>
+<div class="card" data-name="Oliver Bearman">
+    <div class="team-stripe haas" style="background:#fff; border-bottom:2px solid red"></div>
+    <div class="content">
+        <h3>Oliver Bearman <span style="float:right">#87</span></h3>
+        <p><strong>Haas-Ferrari</strong></p>
+        <p>After a stellar 2025 rookie year, Ollie is tipped as a future Ferrari driver.</p>
+        <div class="stats-box">Best Finish: P7 | Points: 34</div>
+    </div>
+</div>
+
+<div class="card" data-name="Pierre Gasly">
+    <div class="team-stripe alpine" style="background:#0093cc"></div>
+    <div class="content">
+        <h3>Pierre Gasly <span style="float:right">#10</span></h3>
+        <p><strong>Alpine-Mercedes</strong></p>
+        <p>Leading the French team into their first year using Mercedes engines.</p>
+        <div class="stats-box">Wins: 1 | Podiums: 5</div>
+    </div>
+</div>
+<div class="card" data-name="Franco Colapinto">
+    <div class="team-stripe alpine" style="background:#0093cc"></div>
+    <div class="content">
+        <h3>Franco Colapinto <span style="float:right">#43</span></h3>
+        <p><strong>Alpine-Mercedes</strong></p>
+        <p>Argentina's hero secures a full-time seat after a brilliant late-2025 surge.</p>
+        <div class="stats-box">Best Finish: P8 | Points: 19</div>
+    </div>
+</div>
+
+<div class="card" data-name="Liam Lawson">
+    <div class="team-stripe racingbulls" style="background:#6692ff"></div>
+    <div class="content">
+        <h3>Liam Lawson <span style="float:right">#30</span></h3>
+        <p><strong>Racing Bulls-Ford</strong></p>
+        <p>Consistency is king. Liam remains the benchmark for the Red Bull junior program.</p>
+        <div class="stats-box">Best Finish: P5 | Points: 44</div>
+    </div>
+</div>
+<div class="card" data-name="Arvid Lindblad">
+    <div class="team-stripe racingbulls" style="background:#6692ff"></div>
+    <div class="content">
+        <h3>Arvid Lindblad <span style="float:right">#41</span></h3>
+        <p><strong>Racing Bulls-Ford</strong></p>
+        <p>The only true rookie in 2026. Arvid is the next "Verstappen-style" prodigy.</p>
+        <div class="stats-box">Debut Season | F2 Highlights: 4 Wins</div>
+    </div>
+</div>
+
+    <script>
+        const btn = document.getElementById("theme-toggle");
+        
+        btn.addEventListener("click", function() {
+            document.body.classList.toggle("light-theme");
+            
+            if (document.body.classList.contains("light-theme")) {
+                btn.textContent = "☀️ Light Mode";
+                btn.style.background = "#ddd";
+                btn.style.color = "#000";
+            } else {
+                btn.textContent = "🌙 Dark Mode";
+                btn.style.background = "#333";
+                btn.style.color = "#fff";
+            }
+        });
+    </script>
+
+</body>
+</html>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Insider 2026 | New Era</title>
+    <style>
+        :root {
+            --f1-red: #e10600;
+            --dark-bg: #15151e;
+            --card-bg: #1f1f27;
+            --text-color: #ffffff;
+            --stat-bg: #2b2b35;
+        }
+
+        body.light-theme {
+            --dark-bg: #f4f4f9;
+            --card-bg: #ffffff;
+            --text-color: #15151e;
+            --stat-bg: #e0e0e0;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            transition: 0.3s;
+        }
+
+        /* Navbar & Controls */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background-color: var(--f1-red);
+            position: sticky; top: 0; z-index: 1000;
+        }
+
+        .controls { display: flex; gap: 15px; align-items: center; }
+
+        input#searchBar {
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+            width: 200px;
+        }
+
+        button#theme-toggle {
+            background: #333; color: white; border: none;
+            padding: 8px 15px; border-radius: 20px; cursor: pointer;
+        }
+
+        /* Hero */
+        .hero { text-align: center; padding: 40px 20px; }
+
+        /* Grid Layouts */
+        .container { padding: 0 5%; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        /* Driver Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .card:hover { transform: translateY(-5px); }
+        .team-stripe { height: 6px; width: 100%; }
+        .content { padding: 20px; }
+
+        /* Livery Gallery */
+        .livery-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid #444;
+        }
+
+        /* Team Colors 2026 */
+        .mclaren { background: #ff8700; }
+        .ferrari { background: #ff2800; }
+        .redbull { background: #0600ef; }
+        .mercedes { background: #00d2be; }
+        .audi { background: #000000; }
+        .cadillac { background: #ffd700; }
+
+        .stats-box {
+            background: var(--stat-bg);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        h2 { border-left: 5px solid var(--f1-red); padding-left: 15px; margin: 40px 0 20px 0; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <h1 style="color:white; margin:0;">F1 2026</h1>
+    <div class="controls">
+        <input type="text" id="searchBar" placeholder="Search drivers..." onkeyup="filterDrivers()">
+        <button id="theme-toggle">🌙 Dark Mode</button>
+    </div>
+</nav>
+
+<div class="container">
+    <header class="hero">
+        <h1>Welcome to the 11-Team Era</h1>
+        <p>Testing concludes in Bahrain. Ferrari leads the timesheets, but Mercedes looks bulletproof.</p>
+    </header>
+
+    <h2>Featured Drivers</h2>
+    <div class="grid" id="driverGrid">
+        <div class="card" data-name="Lando Norris">
+            <div class="team-stripe mclaren"></div>
+            <div class="content">
+                <h3>Lando Norris <span style="float:right">#1</span></h3>
+                <p><strong>McLaren-Mercedes</strong></p>
+                <p>The defending champion. Lando is the first McLaren driver to wear #1 since Mika Häkkinen.</p>
+                <div class="stats-box">WDC: 1 | Wins: 12 | Podiums: 74</div>
+            </div>
+        </div>
+
+        <div class="card" data-name="Lewis Hamilton">
+            <div class="team-stripe ferrari"></div>
+            <div class="content">
+                <h3>Lewis Hamilton <span style="float:right">#44</span></h3>
+                <p><strong>Scuderia Ferrari</strong></p>
+                <p>Year 2 in Red. Lewis topped the long-run simulations during the final day of testing.</p>
+                <div class="stats-box">WDC: 7 | Wins: 105 | Podiums: 202</div>
+            </div>
+        </div>
+
+        <div class="card" data-name="Kimi Antonelli">
+            <div class="team-stripe mercedes"></div>
+            <div class="content">
+                <h3>Kimi Antonelli <span style="float:right">#12</span></h3>
+                <p><strong>Mercedes-AMG</strong></p>
+                <p>The hottest prospect in F1. Mercedes power looks like the class of the 2026 engine field.</p>
+                <div class="stats-box">Sprint Poles: 1 | Podiums: 3</div>
+            </div>
+        </div>
+    </div>
+
+    <h2>2026 Livery Gallery</h2>
+        <div class="grid">
+            <div class="card livery-card">
+                <img src="https://imgs.search.brave.com/Y25k4ZjvEpUtDaw1SvrUWEO9wAXTwSFmG3OziQMri0U/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pY2hl/Zi5iYmNpLmNvLnVr/L2FjZS9zdGFuZGFy/ZC8yNTYwL2Nwc3By/b2RwYi81MjVmL2xp/dmUvMWJiMDY2MTAt/ZjYyYS0xMWYwLTk4/MzktNjk2YzZmYWJi/M2IzLmpwZw" alt="Audi R26">
+                <div class="content">
+                    <h4>Audi R26</h4>
+                    <p>The German giant enters with a striking Black, Red, and Silver launch livery.</p>
+            </div>
+        <div class="card livery-card">
+            <img src="https://imgs.search.brave.com/Smbjs7BbsGzIqvt4XAiOSWlZjHs4AyItEqkKkynDC8w/rs:fit:0:180:1:0/g:ce/aHR0cHM6Ly93d3cu/ZjEtZmFuc2l0ZS5j/b20vd3AtY29udGVu/dC91cGxvYWRzLzIw/MjYvMDIvQ2FkaWxs/YWMtRjEtVGVhbS1D/RjI2LTAxLTMwMHgx/NjkuanBn" alt="Cadillac F1">
+            <div class="content">
+                <h4>Cadillac V-Series</h4>
+                <p>F1's 11th team arrives with a gold-and-black aesthetic powered by Ferrari units.</p>
+            </div>
+         <div class="card livery-card">
+            <img src="https://imgs.search.brave.com/4Px0QOoUv_F4euVRy5b-0w4yZKY_uR4q9PEwx5ilfOE/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9oaXBz/LmhlYXJzdGFwcHMu/Y29tL2htZy1wcm9k/L2ltYWdlcy9zZi0y/Ni1tYWluLXBpY3R1/cmUtNjJmZWExYjIt/NWViNC00YTQyLTkz/NTctYmVjOGFjNDQz/ZTk0LTY5NzNjN2Fj/YzA2YzcuanBnP2Ny/b3A9MXh3OjF4aDtj/ZW50ZXIsdG9w" alt="Ferrari SF-26">
+            <div class="content">
+                <h4>Ferrari SF26</h4>
+                <p>The Ferrari SF-26 is Ferrari’s 2026 Formula 1 challenger built to meet the sport’s new hybrid power unit and chassis regulations</p>
+            </div>    
+        </div>
+        <div class="card livery-card">
+            <img src="https://imgs.search.brave.com/KyVl6teK_43shexBpVR_adbUb47snOuwG22ldjtxbx4/rs:fit:0:180:1:0/g:ce/aHR0cHM6Ly93d3cu/d3N1cGVyY2Fycy5j/b20vdGh1bWJuYWls/cy1zdXBlci11bHRy/YXdpZGUvRm9ybXVs/YS0xL1JlZC1CdWxs/LVJhY2luZy8yMDI2/LUZvcm11bGExLVJl/ZC1CdWxsLVJhY2lu/Zy1SQjIyLTAwNC5q/cGc" alt="Red Bull Ford">
+            <div class="content">
+                <h4>Red Bull RB22</h4>
+                <p>The dawn of the Ford era. Features extra blue accents to celebrate the partnership.</p>
+            </div>
+        </div>
+        <div class="grid">
+        <div class="card livery-card">
+            <img src="https://imgs.search.brave.com/MGSu3xzQ23T8U2eE1GzkOXvfFpje-9AO5XL1mN5V_T4/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pY2hl/Zi5iYmNpLmNvLnVr/L2FjZS9zdGFuZGFy/ZC8xNjgwL2Nwc3By/b2RwYi9lMTA0L2xp/dmUvNmI2NTQ4ODAt/Zjc4Yi0xMWYwLTkw/MWQtMzFiMjlhODRm/N2FhLmpwZw" alt="Mercedes W17">
+            <div class="content">
+                <h4>Mercedes W17</h4>
+                <p>The Mercedes W17 built for new hybrid regulations, featuring sustainable fuels, advanced aerodynamics, and enhanced energy recovery systems.</p>
+            </div>
+
+        <div class="grid">
+        <div class="card livery-card">
+            <img src="https://imgs.search.brave.com/76vBWXHMc256_fhp7IFTw2wj0Q2PSVGdS5IPDXtKhfQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pY2hl/Zi5iYmNpLmNvLnVr/L2FjZS9zdGFuZGFy/ZC8zODQwL2Nwc3By/b2RwYi9mNDU3L2xp/dmUvM2E1OGMwNzAt/ZjUyNy0xMWYwLWJh/NzUtMjlhMWJkZjU4/NDk4LmpwZw" alt="Haas VF26">
+            <div class="content">
+                <h4>Haas VF26</h4>
+                <p>Haas VF-26: The first 2026-spec F1 car featuring Toyota Gazoo Racing branding and active aerodynamics. </p>
+            </div>
+    </div>
+</div>
+
+<script>
+    // Theme Toggle Logic
+    const btn = document.getElementById("theme-toggle");
+    btn.addEventListener("click", () => {
+        document.body.classList.toggle("light-theme");
+        btn.textContent = document.body.classList.contains("light-theme") ? "☀️ Light Mode" : "🌙 Dark Mode";
+    });
+
+    // Search Filter Logic
+    function filterDrivers() {
+        let input = document.getElementById('searchBar').value.toUpperCase();
+        let cards = document.getElementById("driverGrid").getElementsByClassName('card');
+        
+        for (let i = 0; i < cards.length; i++) {
+            let name = cards[i].getAttribute('data-name');
+            if (name.toUpperCase().indexOf(input) > -1) {
+                cards[i].style.display = "";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+
